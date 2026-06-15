@@ -1,62 +1,68 @@
 import { createContext, useEffect, useState } from "react";
 
 export const OpinionsContext = createContext({
-  opinions: null,
-  addOpinion: (opinion) => {},
-  upvoteOpinion: (id) => {},
-  downvoteOpinion: (id) => {},
+  opinions: [],
+  addOpinion: () => {},
+  upvoteOpinion: () => {},
+  downvoteOpinion: () => {},
 });
 
 export function OpinionsContextProvider({ children }) {
-  const [opinions, setOpinions] = useState();
+  const [opinions, setOpinions] = useState([]);
 
   useEffect(() => {
     async function loadOpinions() {
-      const response = await fetch("https://opinion-board-api.onrender.com/opinions");
-      const opinions = await response.json();
-      setOpinions(opinions);
+      try {
+        const response = await fetch(
+          "https://opinion-board-api.onrender.com/opinions"
+        );
+
+        if (!response.ok) return;
+
+        const data = await response.json();
+        setOpinions(data);
+      } catch (err) {
+        console.error("Failed to load opinions:", err);
+      }
     }
 
     loadOpinions();
   }, []);
 
   async function addOpinion(enteredOpinionData) {
-    const response = await fetch("https://opinion-board-api.onrender.com/opinions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(enteredOpinionData),
-    });
+    const response = await fetch(
+      "https://opinion-board-api.onrender.com/opinions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(enteredOpinionData),
+      }
+    );
 
-    if (!response.ok) {
-      return;
-    }
+    if (!response.ok) return;
 
     const savedOpinion = await response.json();
-    setOpinions((prevOpinions) => [savedOpinion, ...prevOpinions]);
+
+    setOpinions((prev) => [savedOpinion, ...prev]);
   }
 
   async function upvoteOpinion(id) {
     const response = await fetch(
-      `http://https://opinion-board-api.onrender.com/opinions/${id}/upvote`,
+      `https://opinion-board-api.onrender.com/opinions/${id}/upvote`,
       {
         method: "POST",
-      },
+      }
     );
 
-    if (!response.ok) {
-      return;
-    }
+    if (!response.ok) return;
 
-    setOpinions((prevOpinions) => {
-      return prevOpinions.map((opinion) => {
-        if (opinion.id === id) {
-          return { ...opinion, votes: opinion.votes + 1 };
-        }
-        return opinion;
-      });
-    });
+    const updatedOpinion = await response.json();
+
+    setOpinions((prev) =>
+      prev.map((op) => (op.id === id ? updatedOpinion : op))
+    );
   }
 
   async function downvoteOpinion(id) {
@@ -64,29 +70,28 @@ export function OpinionsContextProvider({ children }) {
       `https://opinion-board-api.onrender.com/opinions/${id}/downvote`,
       {
         method: "POST",
-      },
+      }
     );
 
-    if (!response.ok) {
-      return;
-    }
+    if (!response.ok) return;
 
-    setOpinions((prevOpinions) => {
-      return prevOpinions.map((opinion) => {
-        if (opinion.id === id) {
-          return { ...opinion, votes: opinion.votes - 1 };
-        }
-        return opinion;
-      });
-    });
+    const updatedOpinion = await response.json();
+
+    setOpinions((prev) =>
+      prev.map((op) => (op.id === id ? updatedOpinion : op))
+    );
   }
 
-  const contextValue = {
-    opinions: opinions,
+  const ctxValue = {
+    opinions,
     addOpinion,
     upvoteOpinion,
     downvoteOpinion,
   };
 
-  return <OpinionsContext value={contextValue}>{children}</OpinionsContext>;
+  return (
+    <OpinionsContext.Provider value={ctxValue}>
+      {children}
+    </OpinionsContext.Provider>
+  );
 }
