@@ -12,7 +12,7 @@ export function OpinionsContextProvider({ children }) {
 
   useEffect(() => {
     async function loadOpinions() {
-      const response = await fetch("http://localhost:3000/opinions");
+      const response = await fetch("https://opinion-board-api.onrender.com/opinions");
       const opinions = await response.json();
       setOpinions(opinions);
     }
@@ -21,7 +21,7 @@ export function OpinionsContextProvider({ children }) {
   }, []);
 
   async function addOpinion(enteredOpinionData) {
-    const response = await fetch("http://localhost:3000/opinions", {
+    const response = await fetch("https://opinion-board-api.onrender.com/opinions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +39,7 @@ export function OpinionsContextProvider({ children }) {
 
   async function upvoteOpinion(id) {
     const response = await fetch(
-      `http://localhost:3000/opinions/${id}/upvote`,
+      `http://https://opinion-board-api.onrender.com/opinions/${id}/upvote`,
       {
         method: "POST",
       },
@@ -61,7 +61,7 @@ export function OpinionsContextProvider({ children }) {
 
   async function downvoteOpinion(id) {
     const response = await fetch(
-      `http://localhost:3000/opinions/${id}/downvote`,
+      `https://opinion-board-api.onrender.com/opinions/${id}/downvote`,
       {
         method: "POST",
       },
