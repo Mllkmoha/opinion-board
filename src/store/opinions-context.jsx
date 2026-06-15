@@ -83,11 +83,24 @@ export function OpinionsContextProvider({ children }) {
     );
   }
 
+  async function deleteOpinion(id) {
+    const response = await fetch(`${API_BASE_URL}/opinions/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) return;
+
+    setOpinions((prev) => {
+      return prev.filter((op) => op.id !== id);
+    });
+  }
+
   const ctxValue = {
     opinions,
     addOpinion,
     upvoteOpinion,
     downvoteOpinion,
+    deleteOpinion,
   };
 
   return (

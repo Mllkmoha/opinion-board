@@ -2,6 +2,21 @@ import fs from "node:fs/promises";
 
 import express from "express";
 
+const app = express();
+
+// CORS
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  next();
+});
+
 async function loadOpinions() {
   try {
     const dbFileData = await fs.readFile("./db.json");
@@ -43,16 +58,6 @@ async function downvoteOpinion(id) {
   return opinion;
 }
 
-const app = express();
-
-// CORS
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
-
 app.use(express.json());
 
 app.get("/opinions", async (req, res) => {
@@ -85,7 +90,7 @@ app.post("/opinions", async (req, res) => {
 app.post("/opinions/:id/upvote", async (req, res) => {
   const { id } = req.params;
   await new Promise((resolve) => setTimeout(resolve, 1000));
-   try {
+  try {
     const opinion = await upvoteOpinion(Number(id));
     if (!opinion) {
       return res.status(404).json({ error: "Opinion not found." });
@@ -108,6 +113,23 @@ app.post("/opinions/:id/downvote", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error downvoting opinion." });
+  }
+});
+
+app.delete("/opinions/:id", async (req, res) => {
+  const { id } = req.params;
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  try {
+    const opinions = await loadOpinions();
+    const opinionIndex = opinions.findIndex((o) => o.id === Number(id));
+    if (opinionIndex === -1) {
+      return res.status(404).json({ error: "Opinion not found." });
+    }
+    opinions.splice(opinionIndex, 1);
+    await fs.writeFile("./db.json", JSON.stringify({ opinions }, null, 2));
+    res.status(204).end();
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting opinion." });
   }
 });
 

@@ -3,7 +3,8 @@ import { use, useActionState, useOptimistic } from "react";
 import { OpinionsContext } from "../store/opinions-context";
 
 export function Opinion({ opinion: { id, title, body, userName, votes } }) {
-  const { upvoteOpinion, downvoteOpinion } = use(OpinionsContext);
+  const { upvoteOpinion, downvoteOpinion, deleteOpinion } =
+    use(OpinionsContext);
 
   const [optimisticVotes, setVotesOptimistically] = useOptimistic(
     votes,
@@ -78,6 +79,15 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
           </svg>
         </button>
       </form>
+      <button
+        type="button"
+        onClick={() => {
+          if (!confirm("Are you sure you want to delete this opinion?")) return;
+          deleteOpinion(id);
+        }}
+      >
+        Delete
+      </button>
     </article>
   );
 }
