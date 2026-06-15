@@ -79,15 +79,19 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
           </svg>
         </button>
       </form>
-      <button
-        type="button"
-        onClick={() => {
-          if (!confirm("Are you sure you want to delete this opinion?")) return;
-          deleteOpinion(id);
-        }}
-      >
-        Delete
-      </button>
+      <p className="actions">
+        <button
+          className="deleteButton"
+          type="button"
+          onClick={() => {
+            if (!confirm("Are you sure you want to delete this opinion?"))
+              return;
+            deleteOpinion(id);
+          }}
+        >
+          Delete
+        </button>
+      </p>
     </article>
   );
 }

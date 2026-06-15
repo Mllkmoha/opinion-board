@@ -103,7 +103,7 @@ main {
   margin-top: 1rem;
 }
 
-#new-opinion button {
+button {
   font: inherit;
   padding: 0.55rem 1.2rem;
   font-size: 0.95rem;
@@ -117,22 +117,23 @@ main {
   transition: all 0.2s;
 }
 
-#new-opinion button:hover {
+button:hover {
   background-color: #f97706;
   transform: translateY(-1px);
 }
 
-#new-opinion button[type="reset"] {
+button[type="reset"] {
   background: transparent;
   border: 1px solid #3a2e22;
   color: #7a6a58;
 }
 
-#new-opinion button[type="reset"]:hover {
+button[type="reset"]:hover {
   border-color: #6a5a48;
   color: #a89880;
   transform: none;
 }
+
 
 .errors {
   list-style: none;
@@ -190,6 +191,7 @@ main {
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  margin-bottom: -3.1rem;
 }
 .votes span {
   color: #fd9217;
