@@ -14,7 +14,7 @@ export function OpinionsContextProvider({ children }) {
     async function loadOpinions() {
       try {
         const response = await fetch(
-          "https://opinion-board-api.onrender.com/opinions"
+          "https://opinion-board-api.onrender.com/opinions",
         );
 
         if (!response.ok) return;
@@ -38,7 +38,7 @@ export function OpinionsContextProvider({ children }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(enteredOpinionData),
-      }
+      },
     );
 
     if (!response.ok) return;
@@ -53,7 +53,7 @@ export function OpinionsContextProvider({ children }) {
       `https://opinion-board-api.onrender.com/opinions/${id}/upvote`,
       {
         method: "POST",
-      }
+      },
     );
 
     if (!response.ok) return;
@@ -61,7 +61,7 @@ export function OpinionsContextProvider({ children }) {
     const updatedOpinion = await response.json();
 
     setOpinions((prev) =>
-      prev.map((op) => (op.id === id ? updatedOpinion : op))
+      prev.map((op) => (op.id === id ? updatedOpinion : op)),
     );
   }
 
@@ -70,7 +70,7 @@ export function OpinionsContextProvider({ children }) {
       `https://opinion-board-api.onrender.com/opinions/${id}/downvote`,
       {
         method: "POST",
-      }
+      },
     );
 
     if (!response.ok) return;
@@ -78,7 +78,7 @@ export function OpinionsContextProvider({ children }) {
     const updatedOpinion = await response.json();
 
     setOpinions((prev) =>
-      prev.map((op) => (op.id === id ? updatedOpinion : op))
+      prev.map((op) => (op.id === id ? updatedOpinion : op)),
     );
   }
 
