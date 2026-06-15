@@ -1,0 +1,25 @@
+{
+  "opinions": [
+    {
+      "id": 1,
+      "userName": "Moha Dev",
+      "title": "Linux is the best OS for developers!",
+      "body": "Once you switch to Linux you never go back.\n\nThe terminal alone is worth it.",
+      "votes": 3
+    },
+    {
+      "id": 2,
+      "userName": "Moha Dev",
+      "title": "React + Node.js is the perfect stack",
+      "body": "Full-stack JavaScript is powerful.\n\nOne language for everything — frontend and backend.",
+      "votes": 0
+    },
+    {
+      "id": 3,
+      "userName": "Ahmed Algérie",
+      "title": "Self-taught developers can compete!",
+      "body": "You don't need a degree to become a great developer.\n\nUdemy + practice + GitHub = job ready.",
+      "votes": 0
+    }
+  ]
+}
