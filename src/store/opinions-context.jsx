@@ -1,5 +1,14 @@
 import { createContext, useEffect, useState } from "react";
 
+function normalizeApiUrl(url) {
+  try {
+    const normalized = new URL(url.replace(/^https?:\/\//, "https://"));
+    return normalized.origin;
+  } catch (error) {
+    return url;
+  }
+}
+
 export const OpinionsContext = createContext({
   opinions: [],
   addOpinion: () => {},
@@ -9,13 +18,14 @@ export const OpinionsContext = createContext({
 
 export function OpinionsContextProvider({ children }) {
   const [opinions, setOpinions] = useState([]);
+  const API_BASE_URL = normalizeApiUrl(
+    import.meta.env.VITE_API_URL ?? "https://opinion-board-api.onrender.com",
+  );
 
   useEffect(() => {
     async function loadOpinions() {
       try {
-        const response = await fetch(
-          "https://opinion-board-api.onrender.com/opinions",
-        );
+        const response = await fetch(`${API_BASE_URL}/opinions`);
 
         if (!response.ok) return;
 
@@ -27,19 +37,16 @@ export function OpinionsContextProvider({ children }) {
     }
 
     loadOpinions();
-  }, []);
+  }, [API_BASE_URL]);
 
   async function addOpinion(enteredOpinionData) {
-    const response = await fetch(
-      "https://opinion-board-api.onrender.com/opinions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(enteredOpinionData),
+    const response = await fetch(`${API_BASE_URL}/opinions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify(enteredOpinionData),
+    });
 
     if (!response.ok) return;
 
@@ -49,12 +56,9 @@ export function OpinionsContextProvider({ children }) {
   }
 
   async function upvoteOpinion(id) {
-    const response = await fetch(
-      `https://opinion-board-api.onrender.com/opinions/${id}/upvote`,
-      {
-        method: "POST",
-      },
-    );
+    const response = await fetch(`${API_BASE_URL}/opinions/${id}/upvote`, {
+      method: "POST",
+    });
 
     if (!response.ok) return;
 
@@ -66,12 +70,9 @@ export function OpinionsContextProvider({ children }) {
   }
 
   async function downvoteOpinion(id) {
-    const response = await fetch(
-      `https://opinion-board-api.onrender.com/opinions/${id}/downvote`,
-      {
-        method: "POST",
-      },
-    );
+    const response = await fetch(`${API_BASE_URL}/opinions/${id}/downvote`, {
+      method: "POST",
+    });
 
     if (!response.ok) return;
 
