@@ -5,11 +5,13 @@ A lightweight full-stack opinion sharing app built with React (Vite) and Node.js
 Users can post opinions, read community thoughts, and vote (upvote/downvote).  
 This project is built for learning full-stack development, REST APIs, and React state management.
 
+## 📸 Preview
+<img width="2880" height="1432" alt="image" src="https://github.com/user-attachments/assets/268bcab9-dd67-4311-bd37-f81112f9bb92" />
+
 ---
 
 ## 🚀 Live Demo
-Coming soon
-
+https://opinion-board-sandy.vercel.app/
 ---
 
 ## 📌 Features
